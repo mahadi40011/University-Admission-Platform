@@ -1,25 +1,47 @@
 "use client";
 import { useState, useEffect } from "react";
 import UniversityCard from "./UniversityCard";
+import CompareModal from "./CompareModal"; 
 
 export default function UniversityList() {
   const [universities, setUniversities] = useState([]);
   const [budget, setBudget] = useState(50000);
   const [userGPA, setUserGPA] = useState("");
   const [userIELTS, setUserIELTS] = useState("");
+  const [selectedUnis, setSelectedUnis] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchUniversities = async () => {
-      const res = await fetch(`/api/universities?budget=${budget}`);
-      const data = await res.json();
-      setUniversities(data);
+      try {
+        const res = await fetch(`/api/universities?budget=${budget}`);
+        const data = await res.json();
+        setUniversities(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
     };
     fetchUniversities();
   }, [budget]);
 
+  const handleSelectForCompare = (uni) => {
+    const isAlreadySelected = selectedUnis.find((u) => u._id === uni._id);
+
+    if (isAlreadySelected) {
+      setSelectedUnis(selectedUnis.filter((u) => u._id !== uni._id));
+    } else {
+      if (selectedUnis.length < 3) {
+        setSelectedUnis([...selectedUnis, uni]);
+      } else {
+        alert("You can compare maximum 3 universities at once.");
+      }
+    }
+  };
+
   return (
-    <div className="max-w-7xl mx-auto p-6 flex flex-col md:flex-row gap-8">
-      <div className="w-full md:w-1/4 bg-white p-6 rounded-2xl shadow-lg border border-gray-100 h-fit sticky top-10">
+    <div className="max-w-7xl mx-auto p-6 flex flex-col md:flex-row gap-8 relative">
+
+      <div className="w-full md:w-1/4 bg-white p-6 rounded-2xl shadow-lg border border-gray-100 h-fit sticky top-10 z-20">
         <h3 className="text-xl font-bold mb-6 text-gray-800">
           Filter & Eligibility
         </h3>
@@ -27,7 +49,9 @@ export default function UniversityList() {
         <div className="mb-8">
           <label className="block text-sm font-semibold text-gray-600 mb-2">
             Max Tuition Fee:{" "}
-            <span className="text-blue-600">${budget.toLocaleString()}</span>
+            <span className="text-blue-600">
+              ${Number(budget).toLocaleString()}
+            </span>
           </label>
           <input
             type="range"
@@ -73,20 +97,46 @@ export default function UniversityList() {
       </div>
 
       <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {universities.map((uni) => {
-          const isNotEligible =
-            (userGPA && Number(userGPA) < uni.gpaRequirement) ||
-            (userIELTS && Number(userIELTS) < uni.ieltsRequirement);
+        {universities.length > 0 ? (
+          universities.map((uni) => {
+            const isNotEligible =
+              (userGPA && Number(userGPA) < uni.gpaRequirement) ||
+              (userIELTS && Number(userIELTS) < uni.ieltsRequirement);
 
-          return (
-            <UniversityCard
-              key={uni._id}
-              isNotEligible={isNotEligible}
-              uni={uni}
-            />
-          );
-        })}
+            return (
+              <UniversityCard
+                key={uni._id}
+                isNotEligible={isNotEligible}
+                uni={uni}
+                onSelect={() => handleSelectForCompare(uni)}
+                isSelected={selectedUnis.some((u) => u._id === uni._id)}
+              />
+            );
+          })
+        ) : (
+          <div className="col-span-full text-center py-20 text-gray-400">
+            No universities found within this budget.
+          </div>
+        )}
       </div>
+
+      {selectedUnis.length >= 2 && (
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-orange-500 text-white px-8 py-4 rounded-full font-bold shadow-2xl hover:bg-orange-600 hover:scale-105 transition-all flex items-center gap-2 animate-bounce"
+          >
+            Compare Now ({selectedUnis.length})
+          </button>
+        </div>
+      )}
+
+      {isModalOpen && (
+        <CompareModal
+          selectedUnis={selectedUnis}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
