@@ -5,7 +5,6 @@ export default function CompareModal({ selectedUnis, onClose }) {
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-100 flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl relative">
-
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-red-100 text-gray-600"
@@ -26,7 +25,7 @@ export default function CompareModal({ selectedUnis, onClose }) {
                   {selectedUnis.map((uni) => (
                     <th
                       key={uni._id}
-                      className="py-4 text-xl font-bold text-blue-600"
+                      className="py-4 text-xl font-bold text-cyan-400"
                     >
                       {uni.name}
                     </th>
@@ -37,7 +36,9 @@ export default function CompareModal({ selectedUnis, onClose }) {
                 <tr>
                   <td className="py-6 font-semibold text-gray-600">Country</td>
                   {selectedUnis.map((uni) => (
-                    <td key={uni._id}>{uni.country}</td>
+                    <td className="text-gray-600" key={uni._id}>
+                      {uni.country}
+                    </td>
                   ))}
                 </tr>
                 <tr>
@@ -45,7 +46,7 @@ export default function CompareModal({ selectedUnis, onClose }) {
                     Total Tuition Fee
                   </td>
                   {selectedUnis.map((uni) => (
-                    <td key={uni._id} className="text-green-600 font-bold">
+                    <td key={uni._id} className="text-cyan-400 font-bold">
                       ${uni.tuitionFee.toLocaleString()}
                     </td>
                   ))}

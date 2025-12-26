@@ -18,7 +18,7 @@ export default function UniversityCard({ isNotEligible, uni, onSelect, isSelecte
       <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 p-4 rounded-xl">
         <div>
           <p className="text-gray-400">Tuition Fee</p>
-          <p className="font-bold text-blue-600">
+          <p className="font-bold text-cyan-400">
             ${uni.tuitionFee.toLocaleString()}
           </p>
         </div>
@@ -37,7 +37,7 @@ export default function UniversityCard({ isNotEligible, uni, onSelect, isSelecte
           type="checkbox"
           checked={isSelected}
           onChange={onSelect}
-          className="w-5 h-5 accent-blue-600 cursor-pointer"
+          className="w-5 h-5 accent-cyan-400 cursor-pointer"
         />
         <span className="text-sm text-gray-500 italic">Select to compare</span>
       </div>
@@ -48,7 +48,7 @@ export default function UniversityCard({ isNotEligible, uni, onSelect, isSelecte
         className={`w-full py-3 rounded-xl font-bold transition-all ${
           isNotEligible
             ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-            : "bg-blue-600 text-white hover:bg-blue-700"
+            : "bg-cyan-400 text-white hover:bg-cyan-600 cursor-pointer"
         }`}
       >
         Apply Now
