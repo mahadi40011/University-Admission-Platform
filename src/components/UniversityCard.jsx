@@ -23,6 +23,10 @@ export default function UniversityCard({ isNotEligible, uni, onSelect, isSelecte
           </p>
         </div>
         <div>
+          <p className="text-gray-400">Degree</p>
+          <p className="font-bold text-gray-700">{uni.degree}</p>
+        </div>
+        <div>
           <p className="text-gray-400">Min GPA</p>
           <p className="font-bold text-gray-700">{uni.gpaRequirement}</p>
         </div>
