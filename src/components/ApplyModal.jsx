@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 
 export default function ApplyModal({ uni, onClose }) {
   const [step, setStep] = useState(1);
@@ -15,7 +16,6 @@ export default function ApplyModal({ uni, onClose }) {
 
   const handleNext = () => {
     if (formData.studentName && formData.email) setStep(2);
-    else alert("Please fill in your name and email.");
   };
 
   const handleSubmit = async (e) => {
@@ -33,7 +33,7 @@ export default function ApplyModal({ uni, onClose }) {
     setLoading(false);
 
     if (res.ok) {
-      alert("Success! Your application has been submitted.");
+      toast.success("Success! Your application has been submitted.");
       onClose();
     } else {
       setErrorMsg(data.error);

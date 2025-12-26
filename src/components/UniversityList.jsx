@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import UniversityCard from "./UniversityCard";
 import CompareModal from "./CompareModal";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 export default function UniversityList() {
   const [universities, setUniversities] = useState([]);
@@ -34,7 +35,7 @@ export default function UniversityList() {
       if (selectedUnis.length < 3) {
         setSelectedUnis([...selectedUnis, uni]);
       } else {
-        alert("You can compare maximum 3 universities at once.");
+        toast.error("You can compare maximum 3 universities at once.");
       }
     }
   };
